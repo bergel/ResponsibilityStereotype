@@ -17,8 +17,17 @@ RSReport >> exampleOnRoassal2 [
 ]
 
 { #category : #'as yet unclassified' }
+RSReport >> exampleOnSmallExample [
+	<script: 'self new exampleOnSmallExample inspect'>
+
+	^ self
+		regExps: #('Tool-Catalog');
+		yourself.
+]
+
+{ #category : #'as yet unclassified' }
 RSReport >> fields [
-	^ #('className' 'classPublicity')
+	^ #('name' 'classPublicity')
 ]
 
 { #category : #'as yet unclassified' }
@@ -45,6 +54,7 @@ RSReport >> produceReportAsCSV [
 	self writeHeaderOn: str.
 	classes do: [ :cls |
 		self write: cls on: str.
+		str cr.
 	].
 	^ str contents
 ]
@@ -68,5 +78,6 @@ RSReport >> write: cls on: str [
 
 { #category : #'as yet unclassified' }
 RSReport >> writeHeaderOn: str [
-	str nextPutAll: (',' join: self fields)
+	str nextPutAll: (',' join: self fields).
+	str cr.
 ]
