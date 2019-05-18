@@ -22,6 +22,21 @@ Class >> getters [
 ]
 
 { #category : #'*ResponsibilityStereotype' }
+Class >> isCollection [
+	^ self inheritsFrom: Collection
+]
+
+{ #category : #'*ResponsibilityStereotype' }
+Class >> isController [
+	^ self name asLowercase endsWith: 'controller'
+]
+
+{ #category : #'*ResponsibilityStereotype' }
+Class >> isOrEr [
+	^ (self name endsWith: 'or') or: [ (self name endsWith: 'er') ]
+]
+
+{ #category : #'*ResponsibilityStereotype' }
 Class >> loc [
 	^ self numberOfLinesOfCode
 ]
@@ -47,6 +62,11 @@ Class >> numIfs [
 ]
 
 { #category : #'*ResponsibilityStereotype' }
+Class >> numImports [
+	^ self dependentClasses size
+]
+
+{ #category : #'*ResponsibilityStereotype' }
 Class >> numMethods [
 	"	
 	RTView numMethods 
@@ -55,10 +75,20 @@ Class >> numMethods [
 ]
 
 { #category : #'*ResponsibilityStereotype' }
+Class >> numOutboundInv [
+	"
+	RTView numOutboundInv
+	A numOutboundInv
+	"
+	^ ((self methods flatCollect: #messages) copyWithoutAll: (self selectors)) size
+]
+
+{ #category : #'*ResponsibilityStereotype' }
 Class >> numParameters [
 	"	
 	RTView numParameters 
 	"	
+	self methods ifEmpty: [ ^ 0 ].
 	^ (self methods collect: #numArgs) sum
 ]
 
@@ -98,6 +128,11 @@ Class >> numPublicMethods [
 	"	
 	^ (self methods select: [ :cm | 
 		(SystemNavigation default allCallsOn: cm selector) anySatisfy: [ :cmm | cmm realClass ~~ cm realClass ] ]) size
+]
+
+{ #category : #'*ResponsibilityStereotype' }
+Class >> numWordName [
+	^ self name cutCamelCase size
 ]
 
 { #category : #'*ResponsibilityStereotype' }

@@ -24,10 +24,10 @@ A >> x2 [
 ]
 
 { #category : #accessing }
-A >> x: aVlaue [
+A >> x: aValue [
 	"
 	(self >> #x:) isAccessor
 	(self >> #x:) isMutator
 	" 
-	x := aVlaue 
+	x := aValue 
 ]
