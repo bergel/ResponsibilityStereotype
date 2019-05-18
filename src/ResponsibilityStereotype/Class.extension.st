@@ -14,8 +14,52 @@ Class >> classPublicity [
 ]
 
 { #category : #'*ResponsibilityStereotype' }
+Class >> getters [ 
+	"
+	RTView getters
+	"
+	^ (self methods select: #isMutator) size
+]
+
+{ #category : #'*ResponsibilityStereotype' }
 Class >> loc [
 	^ self numberOfLinesOfCode
+]
+
+{ #category : #'*ResponsibilityStereotype' }
+Class >> numAttr [
+	"	
+	RTView numAttr 
+	"	
+	^ self instVarNames size
+]
+
+{ #category : #'*ResponsibilityStereotype' }
+Class >> numIfs [
+	"	
+	RTView numIfs 
+	"	
+	| ls result |
+	ls := ((self methods flatCollect: #literals) select: #isSymbol) groupedBy: #yourself.
+	result := 0.
+	#(#ifTrue: #ifFalse: #ifTrue:ifFalse: #detect:IfNone: #whileTrue: #whileFalse: #remove:ifAbsent:) do: [ :k | (ls includesKey: k) ifTrue: [ result := result + (ls at: k) size ] ].
+	^ result	
+]
+
+{ #category : #'*ResponsibilityStereotype' }
+Class >> numMethods [
+	"	
+	RTView numMethods 
+	"	
+	^ self numberOfMethods
+]
+
+{ #category : #'*ResponsibilityStereotype' }
+Class >> numParameters [
+	"	
+	RTView numParameters 
+	"	
+	^ (self methods collect: #numArgs) sum
 ]
 
 { #category : #'*ResponsibilityStereotype' }
@@ -54,4 +98,12 @@ Class >> numPublicMethods [
 	"	
 	^ (self methods select: [ :cm | 
 		(SystemNavigation default allCallsOn: cm selector) anySatisfy: [ :cmm | cmm realClass ~~ cm realClass ] ]) size
+]
+
+{ #category : #'*ResponsibilityStereotype' }
+Class >> setters [ 
+	"
+	RTView setters
+	"
+	^ (self methods select: #isAccessor) size
 ]

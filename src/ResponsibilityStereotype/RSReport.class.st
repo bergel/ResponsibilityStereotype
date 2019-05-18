@@ -27,7 +27,7 @@ RSReport >> exampleOnSmallExample [
 
 { #category : #'as yet unclassified' }
 RSReport >> fields [
-	^ #('name' 'classPublicity' 'numPublicMethods' 'numPrivateMethods' 'numProtectedMethods' 'loc')
+	^ #('name' 'classPublicity' 'numPublicMethods' 'numPrivateMethods' 'numProtectedMethods' 'loc' 'numParameters' 'numAttr' 'numMethods' 'setters')
 ]
 
 { #category : #'as yet unclassified' }
