@@ -93,7 +93,7 @@ RSReport >> write: cls on: str [
 
 { #category : #'as yet unclassified' }
 RSReport >> writeCSVTo: aFilename [
-	aFilename fileReference writeStream nextPutAll: self produceReportAsCSV
+	aFilename asFileReference writeStream nextPutAll: self produceReportAsCSV
 ]
 
 { #category : #'as yet unclassified' }
