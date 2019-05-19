@@ -47,15 +47,28 @@ RSReport >> getSortedAllDefinedClasses [
 ]
 
 { #category : #'as yet unclassified' }
+RSReport >> microPause [
+    "Useful when you wish to log in the Transcript and see progresses"
+    (Delay forMilliseconds: 1) wait.
+    World doOneCycleNow.
+]
+
+{ #category : #'as yet unclassified' }
 RSReport >> produceReportAsCSV [
 	| str classes |
 	str := WriteStream on: String new.
 	classes := self getSortedAllDefinedClasses.
 	self writeHeaderOn: str.
-	classes do: [ :cls |
-		self write: cls on: str.
-		str cr.
-	].
+	UIManager default
+        informUserDuring: [ :bar |
+				classes doWithIndex: [ :cls :index |
+					bar label: (index / classes size * 100) asInteger asString, ' %'.
+					bar current: (index / classes size * 100) asInteger.
+             	self microPause.
+					self write: cls on: str.
+					str cr.
+				]
+			].
 	^ str contents
 ]
 
