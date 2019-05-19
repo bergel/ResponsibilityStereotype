@@ -18,7 +18,7 @@ Class >> getters [
 	"
 	RTView getters
 	"
-	^ (self methods select: #isMutator) size
+	^ (self rsMethods select: #isMutator) size
 ]
 
 { #category : #'*ResponsibilityStereotype' }
@@ -55,7 +55,7 @@ Class >> numIfs [
 	RTView numIfs 
 	"	
 	| ls result |
-	ls := ((self methods flatCollect: #literals) select: #isSymbol) groupedBy: #yourself.
+	ls := ((self rsMethods flatCollect: #literals) select: #isSymbol) groupedBy: #yourself.
 	result := 0.
 	#(#ifTrue: #ifFalse: #ifTrue:ifFalse: #detect:IfNone: #whileTrue: #whileFalse: #remove:ifAbsent:) do: [ :k | (ls includesKey: k) ifTrue: [ result := result + (ls at: k) size ] ].
 	^ result	
@@ -80,7 +80,7 @@ Class >> numOutboundInv [
 	RTView numOutboundInv
 	A numOutboundInv
 	"
-	^ ((self methods flatCollect: #messages) copyWithoutAll: (self selectors)) size
+	^ ((self rsMethods flatCollect: #messages) copyWithoutAll: (self selectors)) size
 ]
 
 { #category : #'*ResponsibilityStereotype' }
@@ -88,8 +88,8 @@ Class >> numParameters [
 	"	
 	RTView numParameters 
 	"	
-	self methods ifEmpty: [ ^ 0 ].
-	^ (self methods collect: #numArgs) sum
+	self rsMethods ifEmpty: [ ^ 0 ].
+	^ (self rsMethods collect: #numArgs) sum
 ]
 
 { #category : #'*ResponsibilityStereotype' }
@@ -100,7 +100,7 @@ Class >> numPrivateMethods [
 	RTView numPublicMethods 55 
 	RTView numberOfMethods 61 
 	"	
-	^ (self methods select: [ :cm | 
+	^ (self rsMethods select: [ :cm | 
 		(SystemNavigation default allCallsOn: cm selector) allSatisfy: [ :cmm | cmm realClass == cm realClass ] ]) size
 ]
 
@@ -114,7 +114,7 @@ Class >> numProtectedMethods [
 	RTView numProtectedMethods 5
 	RTView loc
 	"	
-	^ (self methods select: [ :cm | 
+	^ (self rsMethods select: [ :cm | 
 		(SystemNavigation default allCallsOn: cm selector) allSatisfy: [ :cmm | (cmm realClass == cm realClass) or: [ cmm realClass inheritsFrom: cm realClass ] ] ]) size
 ]
 
@@ -126,7 +126,7 @@ Class >> numPublicMethods [
 	
 	SystemNavigation default allCallsOn: #printOn:
 	"	
-	^ (self methods select: [ :cm | 
+	^ (self rsMethods select: [ :cm | 
 		(SystemNavigation default allCallsOn: cm selector) anySatisfy: [ :cmm | cmm realClass ~~ cm realClass ] ]) size
 ]
 
@@ -136,9 +136,14 @@ Class >> numWordName [
 ]
 
 { #category : #'*ResponsibilityStereotype' }
+Class >> rsMethods [
+	^ self instanceSide methods , self classSide methods
+]
+
+{ #category : #'*ResponsibilityStereotype' }
 Class >> setters [ 
 	"
 	RTView setters
 	"
-	^ (self methods select: #isAccessor) size
+	^ (self rsMethods select: #isAccessor) size
 ]
