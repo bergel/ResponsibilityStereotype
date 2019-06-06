@@ -22,6 +22,16 @@ Class >> getters [
 ]
 
 { #category : #'*ResponsibilityStereotype' }
+Class >> isAbstractClass [
+	^ self isAbstract or: [ '*Abstract*' match: self name ]
+]
+
+{ #category : #'*ResponsibilityStereotype' }
+Class >> isClassRes [
+	^ self isAbstractClass not
+]
+
+{ #category : #'*ResponsibilityStereotype' }
 Class >> isCollection [
 	^ self inheritsFrom: Collection
 ]
@@ -80,7 +90,9 @@ Class >> numOutboundInv [
 	RTView numOutboundInv
 	A numOutboundInv
 	"
-	^ ((self rsMethods flatCollect: #messages) copyWithoutAll: (self selectors)) size
+	| methodsToExclude |
+	methodsToExclude := self withAllSuperclasses flatCollect: #selectors.
+	^ ((self rsMethods flatCollect: #messages) copyWithoutAll: methodsToExclude) size
 ]
 
 { #category : #'*ResponsibilityStereotype' }
@@ -121,13 +133,13 @@ Class >> numProtectedMethods [
 { #category : #'*ResponsibilityStereotype' }
 Class >> numPublicMethods [
 	"	
-	Return public or private indicating the class visibility.
+
 	RSReport numPublicMethods
 	
 	SystemNavigation default allCallsOn: #printOn:
 	"	
 	^ (self rsMethods select: [ :cm | 
-		(SystemNavigation default allCallsOn: cm selector) anySatisfy: [ :cmm | cmm realClass ~~ cm realClass ] ]) size
+		(SystemNavigation default allCallsOn: cm selector) anySatisfy: [ :cmm | (cmm realClass ~~ cm realClass) and: [ (cmm realClass inheritsFrom: cm realClass) not ] ] ]) size
 ]
 
 { #category : #'*ResponsibilityStereotype' }
